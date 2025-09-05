@@ -66,38 +66,17 @@ class DongVatController extends Controller
             'images.*.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif, webp',
             'images.*.max' => 'Kích thước hình ảnh không được vượt quá 5MB'
         ]);
-
         try {
             $dongVat = $this->dongVatService->create($request->all());
-
-            // Xử lý upload ảnh nếu có
             if ($request->hasFile('images')) {
                 $result = $this->dongVatService->addMultipleImages($dongVat->id, $request->file('images'));
                 if (!$result['success']) {
-                    // Nếu upload ảnh thất bại, xóa động vật đã tạo
                     $dongVat->delete();
-                    throw new \Exception($result['error']);
+                    return redirect()->back()->withInput()->with('err', $result['error']);
                 }
             }
-
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Thêm động vật thành công!',
-                    'redirect' => route('dong-vat.index')
-                ]);
-            }
-
-            return redirect()->route('dong-vat.index')
-                ->with('success', 'Thêm động vật thành công!');
+            return redirect()->route('dong-vat.index')->with('success', 'Thêm động vật thành công!');
         } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 400);
-            }
-
             return redirect()->back()->withInput()->with('err', $e->getMessage());
         }
     }
@@ -105,12 +84,12 @@ class DongVatController extends Controller
     public function show(int $id): View
     {
         $dongVat = $this->dongVatService->findById($id);
-
+        $images = $this->dongVatService->getImages($id);
         if (!$dongVat) {
             abort(404, 'Động vật không tồn tại');
         }
 
-        return view('pages.dong-vat.show', compact('dongVat'));
+        return view('pages.dong-vat.show', compact('dongVat', 'images'));
     }
 
     public function edit(int $id): View
@@ -212,11 +191,6 @@ class DongVatController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         try {
-            if ($this->dongVatService->isInUse($id)) {
-                return redirect()->route('dong-vat.index')
-                    ->with('err', 'Không thể xóa động vật này vì đang được sử dụng!');
-            }
-
             $deleted = $this->dongVatService->delete($id);
 
             if ($deleted) {
@@ -232,21 +206,6 @@ class DongVatController extends Controller
         }
     }
 
-    public function search(Request $request): View
-    {
-        $searchTerm = $request->get('search', '');
-        $dongVats = collect();
-
-        if (!empty($searchTerm)) {
-            $dongVats = $this->dongVatService->searchByName($searchTerm);
-        }
-
-        return view('pages.dong-vat.index', compact('dongVats', 'searchTerm'));
-    }
-
-    /**
-     * Upload hình ảnh cho động vật
-     */
     public function uploadImage(Request $request, int $id): \Illuminate\Http\JsonResponse
     {
         $request->validate([
@@ -276,9 +235,6 @@ class DongVatController extends Controller
         ], 400);
     }
 
-    /**
-     * Upload hình ảnh từ file path
-     */
     public function uploadImageFromPath(Request $request, int $id): \Illuminate\Http\JsonResponse
     {
         $request->validate([
@@ -305,33 +261,20 @@ class DongVatController extends Controller
         ], 400);
     }
 
-    /**
-     * Xóa hình ảnh
-     */
-    public function deleteImage(int $imageId): \Illuminate\Http\JsonResponse
+    public function deleteImage(int $imageId): RedirectResponse
     {
         $result = $this->dongVatService->deleteImage($imageId);
 
         if ($result['success']) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Xóa hình ảnh thành công!'
-            ]);
+            return redirect()->back()->with('success', 'Xóa hình ảnh thành công!');
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => $result['error']
-        ], 400);
+        return redirect()->back()->with('err', $result['error']);
     }
 
-    /**
-     * Lấy danh sách hình ảnh
-     */
     public function getImages(int $id): \Illuminate\Http\JsonResponse
     {
         $images = $this->dongVatService->getImages($id);
-
         return response()->json([
             'success' => true,
             'images' => $images

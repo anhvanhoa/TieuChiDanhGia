@@ -101,12 +101,11 @@ Route::prefix('dong-vat')->name('dong-vat.')->group(function () {
     Route::get('/{id}/edit', [DongVatController::class, 'edit'])->name('edit');
     Route::put('/{id}', [DongVatController::class, 'update'])->name('update');
     Route::get('/{id}/destroy', [DongVatController::class, 'destroy'])->name('destroy');
-    Route::get('/search', [DongVatController::class, 'search'])->name('search');
 
     // Routes cho upload hình ảnh
     Route::post('/{id}/upload-image', [DongVatController::class, 'uploadImage'])->name('upload-image');
     Route::post('/{id}/upload-image-from-path', [DongVatController::class, 'uploadImageFromPath'])->name('upload-image-from-path');
-    Route::delete('/image/{imageId}', [DongVatController::class, 'deleteImage'])->name('delete-image');
+    Route::get('/image/{imageId}', [DongVatController::class, 'deleteImage'])->name('delete-image');
     Route::get('/{id}/images', [DongVatController::class, 'getImages'])->name('get-images');
 });
 

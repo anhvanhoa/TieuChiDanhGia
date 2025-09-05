@@ -6,8 +6,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
-// use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Drivers\Gd\Driver;
+// use Intervention\Image\Drivers\Imagick\Driver;
 
 
 class ImageService
@@ -30,13 +30,9 @@ class ImageService
     public function uploadImage(UploadedFile $file, string $folder = 'images'): array
     {
         try {
-            // Validate file
             $this->validateImage($file);
-
-            // Tạo tên file unique
             $filename = $this->generateFilename($file);
 
-            // Đường dẫn lưu trữ
             $path = "$folder/$filename";
             $thumbPath = "$folder/thumbs/$filename";
 
@@ -46,7 +42,6 @@ class ImageService
             $imageData = $image->toJpeg($this->quality);
             Storage::disk($this->disk)->put($path, $imageData);
 
-            // Tạo thumbnail
             $thumbImage = $this->imageManager->read($file);
             $thumbImage->cover($this->thumbWidth, $this->thumbHeight);
             $thumbData = $thumbImage->toJpeg($this->quality);
@@ -81,8 +76,8 @@ class ImageService
 
             // Tạo tên file
             $filename = $this->generateFilename(null, pathinfo($filePath, PATHINFO_EXTENSION));
-            $path = $folder . '/' . $filename;
-            $thumbPath = $folder . '/thumbs/' . $filename;
+            $path = "$folder/$filename";
+            $thumbPath = "$folder/thumbs/$filename";
 
             // Xử lý ảnh gốc
             $image = $this->imageManager->read($filePath);
@@ -169,31 +164,24 @@ class ImageService
 
     protected function validateImage(UploadedFile $file): void
     {
-        // Kiểm tra loại file
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
         if (!in_array($file->getMimeType(), $allowedTypes)) {
             throw new \Exception('Định dạng file không được hỗ trợ. Chỉ chấp nhận: JPG, PNG, GIF, WEBP');
         }
 
-        // Kiểm tra kích thước file (5MB)
         if ($file->getSize() > 5 * 1024 * 1024) {
             throw new \Exception('Kích thước file quá lớn. Tối đa 5MB');
         }
 
-        // Kiểm tra kích thước ảnh
         $imageInfo = getimagesize($file->getPathname());
         if (!$imageInfo) {
             throw new \Exception('File không phải là hình ảnh hợp lệ');
-        }
-
-        if ($imageInfo[0] > 4000 || $imageInfo[1] > 4000) {
-            throw new \Exception('Kích thước ảnh quá lớn. Tối đa 4000x4000 pixels');
         }
     }
 
     protected function validateImageFromPath(string $filePath): void
     {
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
         $mimeType = mime_content_type($filePath);
 
         if (!in_array($mimeType, $allowedTypes)) {

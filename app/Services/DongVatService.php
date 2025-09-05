@@ -58,7 +58,6 @@ class DongVatService
             return false;
         }
 
-        // Xóa tất cả hình ảnh trước khi xóa động vật
         $this->deleteAllImages($id);
 
         return $dongVat->delete();
@@ -243,9 +242,6 @@ class DongVatService
         return DongVatAnh::where('dong_vat_id', $dongVatId)->get();
     }
 
-    /**
-     * Thêm nhiều hình ảnh với rollback
-     */
     public function addMultipleImages(int $dongVatId, array $files): array
     {
         $uploadResults = [];
@@ -257,31 +253,26 @@ class DongVatService
                 return ['success' => false, 'error' => 'Động vật không tồn tại'];
             }
 
-            // Upload tất cả ảnh trước
             foreach ($files as $file) {
                 $result = $this->imageService->uploadImage($file, 'images/dong-vat');
                 $uploadResults[] = $result;
-
                 if (!$result['success']) {
-                    // Nếu có ảnh upload thất bại, rollback tất cả ảnh đã upload
                     $this->imageService->rollbackMultipleUploads($uploadResults);
                     return ['success' => false, 'error' => 'Upload ảnh thất bại: ' . $result['error']];
                 }
             }
 
-            // Lưu tất cả vào database
             $savedImages = [];
             foreach ($uploadResults as $result) {
                 try {
                     $dongVatAnh = DongVatAnh::create([
                         'dong_vat_id' => $dongVatId,
-                        'duong_dan' => $result['path'],
-                        'duong_dan_thumb' => $result['thumb_path']
+                        'duong_dan' => $result['url'],
+                        'duong_dan_thumb' => $result['thumb_url']
                     ]);
                     $savedImages[] = $dongVatAnh;
                     $successCount++;
                 } catch (\Exception $e) {
-                    // Nếu lưu DB thất bại, rollback tất cả ảnh đã upload
                     $this->imageService->rollbackMultipleUploads($uploadResults);
                     return ['success' => false, 'error' => 'Lưu database thất bại: ' . $e->getMessage()];
                 }
@@ -295,15 +286,11 @@ class DongVatService
             ];
 
         } catch (\Exception $e) {
-            // Rollback tất cả ảnh đã upload
             $this->imageService->rollbackMultipleUploads($uploadResults);
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
 
-    /**
-     * Xóa tất cả hình ảnh của động vật
-     */
     public function deleteAllImages(int $dongVatId): bool
     {
         try {

@@ -28,17 +28,10 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên khoa học</th>
-                                    <th>Tên tiếng Việt</th>
+                                    <th>Tên</th>
                                     <th>Tên tác giả</th>
-                                    <th>Chi</th>
-                                    <th>Họ</th>
-                                    <th>Bộ</th>
-                                    <th>Lớp</th>
-                                    <th>Ngành</th>
-                                    <th>Sách đỏ</th>
-                                    <th>IUCN</th>
-                                    <th>Đặc hữu</th>
+                                    <th>Cấp bậc</th>
+                                    <th>Cấp độ bảo tồn</th>
                                     <th>Ngày tạo</th>
                                     <th>Hành động</th>
                                 </tr>
@@ -48,59 +41,58 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <h5 class="fs-14 mt-1 mb-0">{{ $item->ten_khoa_hoc }}</h5>
-                                                </div>
+                                            <div>
+                                                <p class="fs-14 mt-1 mb-0">
+                                                    Vn: {{ $item->ten_khoa_hoc }}
+                                                </p>
+                                                <p class="fs-14 mt-1 mb-0">
+                                                    Latin: {{ $item->ten_tieng_viet }}
+                                                </p>
                                             </div>
                                         </td>
-                                        <td>{{ $item->ten_tieng_viet }}</td>
                                         <td>{{ $item->ten_tac_gia ?? 'N/A' }}</td>
-                                        <td>
-                                            <span class="badge bg-info-subtle text-info">
-                                                {{ $item->bacChi->ten_tieng_viet ?? 'N/A' }}
-                                            </span>
+                                        <td style="max-width: 300px;">
+                                            <div  class="d-flex flex-wrap gap-2">
+                                                <span class="badge bg-info-subtle text-info">
+                                                    Chi: {{ $item->bacChi->ten_tieng_viet ?? 'N/A' }}
+                                                </span>
+                                                <span class="badge bg-danger-subtle text-danger">
+                                                    Họ: {{ $item->bacChi->bacHo->ten_tieng_viet ?? 'N/A' }}
+                                                </span>
+                                                <span class="badge bg-success-subtle text-success">
+                                                    Bộ: {{ $item->bacChi->bacHo->bacBo->ten_tieng_viet ?? 'N/A' }}
+                                                </span>
+                                                <span class="badge bg-warning-subtle text-warning">
+                                                    Lớp: {{ $item->bacChi->bacHo->bacBo->bacLop->ten_tieng_viet ?? 'N/A' }}
+                                                </span>
+                                                <span class="badge bg-primary-subtle text-primary">
+                                                    Ngành: {{ $item->bacChi->bacHo->bacBo->bacLop->bacNganh->ten_tieng_viet ?? 'N/A' }}
+                                                </span>
+                                            </div>
                                         </td>
-                                        <td>
-                                            <span class="badge bg-danger-subtle text-danger">
-                                                {{ $item->bacChi->bacHo->ten_tieng_viet ?? 'N/A' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-success-subtle text-success">
-                                                {{ $item->bacChi->bacHo->bacBo->ten_tieng_viet ?? 'N/A' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-warning-subtle text-warning">
-                                                {{ $item->bacChi->bacHo->bacBo->bacLop->ten_tieng_viet ?? 'N/A' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-primary-subtle text-primary">
-                                                {{ $item->bacChi->bacHo->bacBo->bacLop->bacNganh->ten_tieng_viet ?? 'N/A' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @if($item->sach_do)
-                                                <span class="badge bg-danger-subtle text-danger">{{ $item->sach_do }}</span>
-                                            @else
-                                                <span class="text-muted">N/A</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($item->iucn)
-                                                <span class="badge bg-warning-subtle text-warning">{{ $item->iucn }}</span>
-                                            @else
-                                                <span class="text-muted">N/A</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($item->dac_huu)
-                                                <span class="badge bg-success-subtle text-success">{{ $item->dac_huu }}</span>
-                                            @else
-                                                <span class="text-muted">N/A</span>
-                                            @endif
+                                        <td style="max-width: 300px;">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @if($item->sach_do)
+                                                    <span class="badge bg-danger-subtle text-danger">
+                                                        Sách đỏ: {{ $item->sach_do }}
+                                                    </span>
+                                                @endif
+                                                @if($item->iucn)
+                                                    <span class="badge bg-warning-subtle text-warning">
+                                                        IUCN: {{ $item->iucn }}
+                                                    </span>
+                                                @endif
+                                                @if($item->dac_huu)
+                                                    <span class="badge bg-success-subtle text-success">
+                                                        Đặc hữu: {{ $item->dac_huu }}
+                                                    </span>
+                                                @endif
+                                                @if($item->nd_84)
+                                                    <span class="badge bg-primary-subtle text-primary">
+                                                        ND 84: {{ $item->nd_84 }}
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td>{{ $item->created_at ? $item->created_at->format('d-m-Y H:i:s') : 'N/A' }}</td>
                                         <td>

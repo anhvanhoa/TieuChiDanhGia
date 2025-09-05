@@ -1,7 +1,8 @@
 @extends('layouts.index')
 
 @section('header_first')
-<link rel="stylesheet" href="{{ asset('plugins/custom_upload_images/css/image-management.css') }}">
+    <link href="{{ asset('plugins/custom_upload_images/css/upload.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/custom_upload_images/css/upload-component.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -20,14 +21,14 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('thuc-vat.update', $thucVat->id) }}" method="POST">
+                        <form action="{{ route('thuc-vat.update', $thucVat->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="bac_chi_id" class="form-label">
-                                            Chi <span class="text-danger">*</span>
+                                            Chi
                                         </label>
                                         <select class="form-control" id="bac_chi_id" name="bac_chi_id" required>
                                             <option value="">-- Chọn chi --</option>
@@ -43,7 +44,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="ten_khoa_hoc" class="form-label">
-                                            Tên khoa học <span class="text-danger">*</span>
+                                            Tên khoa học
                                         </label>
                                         <input type="text" class="form-control" id="ten_khoa_hoc" name="ten_khoa_hoc"
                                             value="{{ old('ten_khoa_hoc', $thucVat->ten_khoa_hoc) }}" placeholder="Nhập tên khoa học"
@@ -56,7 +57,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="ten_tieng_viet" class="form-label">
-                                            Tên tiếng Việt <span class="text-danger">*</span>
+                                            Tên tiếng Việt
                                         </label>
                                         <input type="text" class="form-control" id="ten_tieng_viet" name="ten_tieng_viet"
                                             value="{{ old('ten_tieng_viet', $thucVat->ten_tieng_viet) }}" placeholder="Nhập tên tiếng Việt"
@@ -138,7 +139,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="dac_huu" class="form-label">
                                             Đặc hữu
@@ -147,7 +148,7 @@
                                             value="{{ old('dac_huu', $thucVat->dac_huu) }}" placeholder="Nhập đặc hữu">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="sach_do" class="form-label">
                                             Sách đỏ
@@ -156,7 +157,9 @@
                                             value="{{ old('sach_do', $thucVat->sach_do) }}" placeholder="Nhập sách đỏ">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="iucn" class="form-label">
                                             IUCN
@@ -165,9 +168,6 @@
                                             value="{{ old('iucn', $thucVat->iucn) }}" placeholder="Nhập IUCN">
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="nd_84" class="form-label">
@@ -177,6 +177,9 @@
                                             value="{{ old('nd_84', $thucVat->nd_84) }}" placeholder="Nhập NĐ 84">
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="gia_tri" class="form-label">
@@ -186,10 +189,7 @@
                                             placeholder="Mô tả giá trị">{{ old('gia_tri', $thucVat->gia_tri) }}</textarea>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="nguon" class="form-label">
                                             Nguồn
@@ -211,8 +211,7 @@
                                         <div class="image-management-body">
                                             <!-- Ảnh hiện có -->
                                             @if($images && count($images) > 0)
-                                            <div class="existing-images-section">
-                                                <h6 class="existing-images-title">Ảnh hiện có ({{ count($images) }})</h6>
+                                            <div class="existing-images-section mb-3">
                                                 <div class="existing-images-grid" id="existingImages">
                                                     @foreach($images as $image)
                                                     <div class="image-card fade-in" data-image-id="{{ $image->id }}">
@@ -242,13 +241,12 @@
 
                                             <!-- Upload ảnh mới -->
                                             <div class="new-images-section">
-                                                <h6 class="new-images-title">Thêm ảnh mới</h6>
                                                 <div class="upload-container">
                                                     <div class="upload-area" id="uploadArea">
                                                         <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
                                                         <div class="upload-content" id="uploadContent">
                                                             <div class="image-icon">
-                                                                <i class="ri-image-line upload-icon"></i>
+                                                                <i class="ri-image-line upload-icon text-white"></i>
                                                             </div>
                                                             <div class="upload-text">
                                                                 <span class="browse-text">Kéo thả hình ảnh vào đây</span> hoặc
@@ -258,14 +256,9 @@
                                                                 Hỗ trợ: JPG, PNG, GIF, WEBP (tối đa 5MB)
                                                             </div>
                                                         </div>
-                                                        <div class="preview-container" id="previewContainer" style="display: none;">
-                                                            <img class="preview-image" id="previewImage" alt="Preview">
-                                                            <button type="button" class="remove-button" id="removeButton">×</button>
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div id="imagesPreview" class="existing-images-grid mt-3">
-                                                    <!-- Ảnh mới đã chọn sẽ hiển thị ở đây -->
                                                 </div>
                                             </div>
                                         </div>
@@ -274,7 +267,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 mt-3">
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-sm btn-primary">
                                             <i class="ri-save-line me-1"></i>Xác nhận
@@ -293,116 +286,43 @@
     </div>
 @endsection
 
-@section('style')
-    <link href="{{ asset('plugins/custom_upload_images/css/upload.css') }}" rel="stylesheet" type="text/css" />
-@endsection
-
 @section('script')
     <script src="{{ asset('plugins/custom_upload_images/js/image_upload.js') }}"></script>
+    <script src="{{ asset('plugins/custom_upload_images/js/upload-component.js') }}"></script>
     <script>
-        let selectedFiles = [];
         const thucVatId = {{ $thucVat->id }};
 
         $(document).ready(function () {
             $('#ten_khoa_hoc').focus();
             initSumoSelect($('#bac_chi_id'));
-            initializeImageUpload();
-        });
-
-        function initializeImageUpload() {
-            const $uploadArea = $('#uploadArea');
-            const $fileInput = $('#fileInput');
-            const $uploadContent = $('#uploadContent');
-            const $previewContainer = $('#previewContainer');
-            const $previewImage = $('#previewImage');
-            const $removeButton = $('#removeButton');
-            const $imagesPreview = $('#imagesPreview');
-
-            // Drag and drop events
-            const eventNames = ['dragenter', 'dragover', 'dragleave', 'drop'];
-            eventNames.forEach(eventName => {
-                $uploadArea.on(eventName, preventDefaults);
-                $(document).on(eventName, preventDefaults);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            $uploadArea.on('dragenter dragover', function() {
-                $(this).addClass('dragging');
-            });
-
-            $uploadArea.on('dragleave drop', function() {
-                $(this).removeClass('dragging');
-            });
-
-            $uploadArea.on('drop', function(e) {
-                const files = e.originalEvent.dataTransfer.files;
-                handleFiles(files);
-            });
-
-            $fileInput.on('change', function() {
-                handleFiles(this.files);
-            });
-
-            function handleFiles(files) {
-                Array.from(files).forEach(file => {
-                    if (file && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/webp')) {
-                        selectedFiles.push(file);
-                        displayImagePreview(file);
+            
+            // Initialize upload component
+            const uploadComponent = initializeUploadComponent({
+                uploadArea: '#uploadArea',
+                fileInput: '#fileInput',
+                uploadContent: '#uploadContent',
+                previewContainer: '#previewContainer',
+                previewImage: '#previewImage',
+                removeButton: '#removeButton',
+                imagesPreview: '#imagesPreview',
+                maxFileSize: 5 * 1024 * 1024, // 5MB
+                allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+                onError: function(message) {
+                    if (typeof showToast === 'function') {
+                        showToast('Lỗi', message, 'error');
                     } else {
-                        showToast('Vui lòng chọn tệp tin hình ảnh hợp lệ.', "err");
+                        alert(message);
                     }
-                });
-                $fileInput.val('');
-            }
-
-            function displayImagePreview(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageId = 'preview_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                    const imageHtml = `
-                        <div class="image-card fade-in" id="${imageId}">
-                            <div class="position-relative">
-                                <img src="${e.target.result}" class="image-card-image" alt="Preview">
-                                <div class="image-card-overlay"></div>
-                                <div class="image-card-actions">
-                                    <button type="button" class="image-card-action-btn image-card-delete-btn" onclick="removeImagePreview('${imageId}')" title="Xóa ảnh">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="image-card-info">
-                                <div class="image-card-filename">${file.name}</div>
-                                <div class="image-card-date">Chờ upload</div>
-                            </div>
-                        </div>
-                    `;
-                    $imagesPreview.append(imageHtml);
-                };
-                reader.readAsDataURL(file);
-            }
-
-            $removeButton.on('click', function(e) {
-                e.preventDefault();
-                $previewContainer.hide();
-                $previewImage.attr('src', '');
-                $uploadContent.fadeIn();
-            });
-
-            $uploadArea.on('click', function() {
-                if (!$fileInput.is(':focus')) {
-                    $fileInput.trigger('click');
                 }
             });
-        }
-
-        function removeImagePreview(imageId) {
-            $('#' + imageId).remove();
-            // Có thể cần cập nhật selectedFiles array nếu cần
-        }
+            
+            // Initialize form upload handler
+            initializeFormUploadHandler('form', uploadComponent, {
+                successMessage: 'Cập nhật thực vật thành công',
+                errorMessage: 'Có lỗi xảy ra khi cập nhật thực vật',
+                redirectDelay: 1500
+            });
+        });
 
         // Function để xóa ảnh hiện có
         function deleteExistingImage(imageId) {
@@ -416,13 +336,15 @@
                     success: function(response) {
                         if (response.success) {
                             showToast('Thành công', response.message, 'success');
-                            // Xóa ảnh khỏi DOM
-                            $(`[data-image-id="${imageId}"]`).remove();
-
-                            // Kiểm tra nếu không còn ảnh nào thì ẩn section
-                            if ($('#existingImages .col-md-3').length === 0) {
-                                $('#existingImages').parent().remove();
-                            }
+                            // Xóa ảnh khỏi DOM với animation
+                            $(`[data-image-id="${imageId}"]`).fadeOut(300, function() {
+                                $(this).remove();
+                                
+                                // Kiểm tra nếu không còn ảnh nào thì ẩn section
+                                if ($('#existingImages .image-card').length === 0) {
+                                    $('#existingImages').parent().remove();
+                                }
+                            });
                         } else {
                             showToast('Lỗi', response.message, 'error');
                         }
@@ -434,51 +356,5 @@
                 });
             }
         }
-
-        // Cập nhật form submit để gửi kèm ảnh
-        $('form').on('submit', function(e) {
-            if (selectedFiles.length > 0) {
-                // Tạo FormData mới
-                const formData = new FormData(this);
-
-                // Thêm các file ảnh
-                selectedFiles.forEach((file, index) => {
-                    formData.append('images[]', file);
-                });
-
-                // Gửi form với AJAX
-                e.preventDefault();
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            showToast('Thành công', response.message, 'success');
-                            window.location.href = response.redirect || '/thuc-vat';
-                        } else {
-                            showToast('Lỗi', response.message, 'error');
-                        }
-                    },
-                    error: function(xhr) {
-                        const response = xhr.responseJSON;
-                        if (response && response.errors) {
-                            let errorMessage = 'Có lỗi xảy ra:\n';
-                            Object.values(response.errors).forEach(errors => {
-                                errors.forEach(error => {
-                                    errorMessage += '- ' + error + '\n';
-                                });
-                            });
-                            showToast('Lỗi', errorMessage, 'error');
-                        } else {
-                            showToast('Lỗi', response?.message || 'Có lỗi xảy ra khi cập nhật thực vật', 'error');
-                        }
-                    }
-                });
-            }
-        });
     </script>
 @endsection
