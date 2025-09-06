@@ -35,6 +35,10 @@ Route::prefix('vuon-quoc-gia')->name('vuon-quoc-gia.')->group(function () {
     Route::get('/{id}/edit', [VuonQuocGiaController::class, 'edit'])->name('edit');
     Route::put('/{id}', [VuonQuocGiaController::class, 'update'])->name('update');
     Route::get('/{id}/destroy', [VuonQuocGiaController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/input-criteria', [VuonQuocGiaController::class, 'inputCriteria'])->name('input-criteria');
+        Route::post('/{id}/store-criteria', [VuonQuocGiaController::class, 'storeCriteria'])->name('store-criteria');
+        Route::get('/{id}/export-excel', [VuonQuocGiaController::class, 'exportExcel'])->name('export-excel');
+        Route::post('/{id}/import-excel', [VuonQuocGiaController::class, 'importExcel'])->name('import-excel');
 });
 
 // Routes cho BacNganh

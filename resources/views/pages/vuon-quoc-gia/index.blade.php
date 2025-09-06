@@ -71,6 +71,13 @@
                                                     aria-label="Cập nhật">
                                                     <i class="ri-edit-line"></i>
                                                 </a>
+                                                <a href="{{ route('vuon-quoc-gia.input-criteria', $item->id) }}"
+                                                    data-toggle="tooltip" data-bs-custom-class="tooltip-success"
+                                                    data-bs-placement="bottom" data-bs-original-title="Nhập dữ liệu tiêu chí"
+                                                    class="btn btn-icon btn-sm btn-outline-success rounded-pill"
+                                                    aria-label="Nhập dữ liệu tiêu chí">
+                                                    <i class="ri-database-2-line"></i>
+                                                </a>
                                                 <a href="#" data-toggle="tooltip" data-bs-custom-class="tooltip-danger"
                                                     data-bs-placement="bottom" data-bs-original-title="Xóa"
                                                     data-bs-href="{{ route('vuon-quoc-gia.destroy', $item->id) }}"
