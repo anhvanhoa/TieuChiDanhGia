@@ -281,8 +281,8 @@ class ThucVatService
                 try {
                     $thucVatAnh = ThucVatAnh::create([
                         'thuc_vat_id' => $thucVatId,
-                        'duong_dan' => $result['path'],
-                        'duong_dan_thumb' => $result['thumb_path']
+                        'duong_dan' => $result['url'],
+                        'duong_dan_thumb' => $result['thumb_url']
                     ]);
                     $savedImages[] = $thucVatAnh;
                     $successCount++;

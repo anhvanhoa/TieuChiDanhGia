@@ -86,7 +86,7 @@ class SidebarComposer
                 'chil' => [
                     [
                         'label' => 'Động vật',
-                        'icon' => '<i data-lucide="zap"></i>',
+                        'icon' => '<i data-lucide="squirrel"></i>',
                         'route' => route('dong-vat.index'),
                         'active' => Request()->is('dong-vat'),
                     ],

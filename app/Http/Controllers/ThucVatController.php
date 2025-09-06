@@ -200,11 +200,6 @@ class ThucVatController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         try {
-            if ($this->thucVatService->isInUse($id)) {
-                return redirect()->route('thuc-vat.index')
-                    ->with('err', 'Không thể xóa thực vật này vì đang được sử dụng!');
-            }
-
             $deleted = $this->thucVatService->delete($id);
 
             if ($deleted) {

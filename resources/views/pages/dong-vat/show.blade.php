@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Sách đỏ:</label>
                                     <p class="form-control-plaintext">
@@ -113,24 +113,12 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">IUCN:</label>
                                     <p class="form-control-plaintext">
                                         @if($dongVat->iucn)
                                             <span class="badge bg-warning-subtle text-warning">{{ $dongVat->iucn }}</span>
-                                        @else
-                                            <span class="text-muted">N/A</span>
-                                        @endif
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Đặc hữu:</label>
-                                    <p class="form-control-plaintext">
-                                        @if($dongVat->dac_huu)
-                                            <span class="badge bg-success-subtle text-success">{{ $dongVat->dac_huu }}</span>
                                         @else
                                             <span class="text-muted">N/A</span>
                                         @endif
@@ -148,8 +136,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Ngày tạo:</label>
-                                    <p class="form-control-plaintext">{{ $dongVat->created_at ? $dongVat->created_at->format('d-m-Y H:i:s') : 'N/A' }}</p>
+                                    <label class="form-label fw-bold">Đặc hữu:</label>
+                                    <p class="form-control-plaintext">
+                                        @if($dongVat->dac_huu)
+                                            <span class="badge bg-success-subtle text-success">{{ $dongVat->dac_huu }}</span>
+                                        @else
+                                            <span class="text-muted">N/A</span>
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +216,7 @@
                     <div class="card-body">
                         <div class="row">
                             @foreach($images as $image)
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <img src="{{ asset($image->duong_dan_thumb) }}" class="img-fluid img-thumbnail" alt="Hình ảnh">
                                 </div>
                             @endforeach
