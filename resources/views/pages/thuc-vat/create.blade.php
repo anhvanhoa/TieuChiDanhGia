@@ -210,7 +210,7 @@
                                             <div class="new-images-section">
                                                 <div class="upload-container">
                                                     <div class="upload-area" id="uploadArea">
-                                                        <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+                                                        <input name="images[]" type="file" id="fileInput" class="file-input" accept="image/*" multiple>
                                                         <div class="upload-content" id="uploadContent">
                                                             <div class="image-icon">
                                                                 <i class="ri-image-line upload-icon text-white"></i>
@@ -222,10 +222,6 @@
                                                             <div class="upload-hint">
                                                                 Hỗ trợ: JPG, PNG, GIF, WEBP (tối đa 5MB)
                                                             </div>
-                                                        </div>
-                                                        <div class="preview-container" id="previewContainer" style="display: none;">
-                                                            <img class="preview-image" id="previewImage" alt="Preview">
-                                                            <button type="button" class="remove-button" id="removeButton">×</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -284,11 +280,6 @@
                 }
             });
             
-            initializeFormUploadHandler('form', uploadComponent, {
-                successMessage: 'Thêm thực vật thành công',
-                errorMessage: 'Có lỗi xảy ra khi tạo thực vật',
-                redirectDelay: 1500
-            });
         });
     </script>
 @endsection

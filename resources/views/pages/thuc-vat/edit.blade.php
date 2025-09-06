@@ -216,13 +216,17 @@
                                                     @foreach($images as $image)
                                                     <div class="image-card fade-in" data-image-id="{{ $image->id }}">
                                                         <div class="position-relative">
-                                                            <img src="{{ asset('storage/' . $image->duong_dan_thumb) }}"
+                                                            <img src="{{ asset($image->duong_dan_thumb) }}"
                                                                 class="image-card-image" alt="Hình ảnh">
                                                             <div class="image-card-overlay"></div>
                                                             <div class="image-card-actions">
-                                                                <button type="button" class="image-card-action-btn image-card-delete-btn"
-                                                                        onclick="deleteExistingImage({{ $image->id }})"
-                                                                        title="Xóa hình ảnh">
+                                                                <button 
+                                                                    type="button" 
+                                                                    class="image-card-action-btn image-card-delete-btn"
+                                                                    title="Xóa hình ảnh"
+                                                                    data-bs-href="{{ route('thuc-vat.delete-image', $image->id) }}"
+                                                                    data-bs-toggle="modal" data-bs-target="#confirm_delete"
+                                                                >
                                                                     <i class="ri-delete-bin-line"></i>
                                                                 </button>
                                                             </div>
@@ -243,7 +247,7 @@
                                             <div class="new-images-section">
                                                 <div class="upload-container">
                                                     <div class="upload-area" id="uploadArea">
-                                                        <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+                                                        <input name="images[]" type="file" id="fileInput" class="file-input" accept="image/*" multiple>
                                                         <div class="upload-content" id="uploadContent">
                                                             <div class="image-icon">
                                                                 <i class="ri-image-line upload-icon text-white"></i>
@@ -290,8 +294,6 @@
     <script src="{{ asset('plugins/custom_upload_images/js/image_upload.js') }}"></script>
     <script src="{{ asset('plugins/custom_upload_images/js/upload-component.js') }}"></script>
     <script>
-        const thucVatId = {{ $thucVat->id }};
-
         $(document).ready(function () {
             $('#ten_khoa_hoc').focus();
             initSumoSelect($('#bac_chi_id'));
@@ -316,45 +318,6 @@
                 }
             });
             
-            // Initialize form upload handler
-            initializeFormUploadHandler('form', uploadComponent, {
-                successMessage: 'Cập nhật thực vật thành công',
-                errorMessage: 'Có lỗi xảy ra khi cập nhật thực vật',
-                redirectDelay: 1500
-            });
         });
-
-        // Function để xóa ảnh hiện có
-        function deleteExistingImage(imageId) {
-            if (confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
-                $.ajax({
-                    url: `/thuc-vat/image/${imageId}`,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            showToast('Thành công', response.message, 'success');
-                            // Xóa ảnh khỏi DOM với animation
-                            $(`[data-image-id="${imageId}"]`).fadeOut(300, function() {
-                                $(this).remove();
-                                
-                                // Kiểm tra nếu không còn ảnh nào thì ẩn section
-                                if ($('#existingImages .image-card').length === 0) {
-                                    $('#existingImages').parent().remove();
-                                }
-                            });
-                        } else {
-                            showToast('Lỗi', response.message, 'error');
-                        }
-                    },
-                    error: function(xhr) {
-                        const response = xhr.responseJSON;
-                        showToast('Lỗi', response?.message || 'Có lỗi xảy ra khi xóa', 'error');
-                    }
-                });
-            }
-        }
     </script>
 @endsection

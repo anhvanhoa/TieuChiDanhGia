@@ -272,7 +272,12 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="imagesContainer" class="row">
+                        <div class="row">
+                            @foreach($images as $image)
+                                <div class="col-md-3 mb-3">
+                                    <img src="{{ asset($image->duong_dan_thumb) }}" class="img-fluid img-thumbnail" alt="Hình ảnh">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -285,85 +290,3 @@
     <link href="{{ asset('plugins/custom_upload_images/css/upload.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('script')
-    <script src="{{ asset('plugins/custom_upload_images/js/image_upload.js') }}"></script>
-    <script>
-        const thucVatId = {{ $thucVat->id }};
-        let selectedFile = null;
-
-        $(document).ready(function() {
-            loadImages();
-        });
-
-        function loadImages() {
-            $.get(`/thuc-vat/${thucVatId}/images`)
-                .done(function(response) {
-                    if (response.success) {
-                        displayImages(response.images);
-                    }
-                })
-                .fail(function() {
-                    showToast('Lỗi', 'Không thể tải hình ảnh', 'error');
-                });
-        }
-
-        function displayImages(images) {
-            const container = $('#imagesContainer');
-            container.empty();
-
-            if (images.length === 0) {
-                container.html(`
-                    <div class="col-12 text-center py-4">
-                        <i class="ri-image-line fs-48 text-muted"></i>
-                        <p class="text-muted mt-2">Chưa có hình ảnh nào</p>
-                    </div>
-                `);
-                return;
-            }
-
-            images.forEach(function(image) {
-                const imageHtml = `
-                    <div class="col-md-3" data-image-id="${image.id}">
-                        <div class="card">
-                            <div class="position-relative">
-                                <img src="${image.duong_dan_thumb ? '/storage/' + image.duong_dan_thumb : '/storage/' + image.duong_dan}"
-                                    class="card-img-top" style="height: 200px; object-fit: cover;"
-                                    alt="Hình ảnh">
-                                <div class="position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon btn-sm btn-danger rounded-circle"
-                                            onclick="deleteImage(${image.id})" title="Xóa hình ảnh">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.append(imageHtml);
-            });
-        }
-        function deleteImage(imageId) {
-            if (confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
-                $.ajax({
-                    url: `/thuc-vat/image/${imageId}`,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            showToast('Thành công', response.message, 'success');
-                            loadImages();
-                        } else {
-                            showToast('Lỗi', response.message, 'error');
-                        }
-                    },
-                    error: function(xhr) {
-                        const response = xhr.responseJSON;
-                        showToast('Lỗi', response?.message || 'Có lỗi xảy ra khi xóa', 'error');
-                    }
-                });
-            }
-        }
-    </script>
-@endsection

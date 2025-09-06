@@ -73,35 +73,15 @@ class ThucVatController extends Controller
 
         try {
             $thucVat = $this->thucVatService->create($request->all());
-
-            // Xử lý upload ảnh nếu có
             if ($request->hasFile('images')) {
                 $result = $this->thucVatService->addMultipleImages($thucVat->id, $request->file('images'));
                 if (!$result['success']) {
-                    // Nếu upload ảnh thất bại, xóa thực vật đã tạo
                     $thucVat->delete();
-                    throw new \Exception($result['error']);
+                    return redirect()->back()->withInput()->with('err', $result['error']);
                 }
             }
-
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Thêm thực vật thành công!',
-                    'redirect' => route('thuc-vat.index')
-                ]);
-            }
-
-            return redirect()->route('thuc-vat.index')
-                ->with('success', 'Thêm thực vật thành công!');
+            return redirect()->route('thuc-vat.index')->with('success', 'Thêm thực vật thành công!');
         } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 400);
-            }
-
             return redirect()->back()->withInput()->with('err', $e->getMessage());
         }
     }
@@ -109,12 +89,12 @@ class ThucVatController extends Controller
     public function show(int $id): View
     {
         $thucVat = $this->thucVatService->findById($id);
-
+        $images = $this->thucVatService->getImages($id);
         if (!$thucVat) {
             abort(404, 'Thực vật không tồn tại');
         }
 
-        return view('pages.thuc-vat.show', compact('thucVat'));
+        return view('pages.thuc-vat.show', compact('thucVat', 'images'));
     }
 
     public function edit(int $id): View
@@ -313,24 +293,15 @@ class ThucVatController extends Controller
         ], 400);
     }
 
-    /**
-     * Xóa hình ảnh
-     */
-    public function deleteImage(int $imageId): \Illuminate\Http\JsonResponse
+    public function deleteImage(int $imageId): RedirectResponse
     {
         $result = $this->thucVatService->deleteImage($imageId);
 
         if ($result['success']) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Xóa hình ảnh thành công!'
-            ]);
+            return redirect()->back()->with('success', 'Xóa hình ảnh thành công!');
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => $result['error']
-        ], 400);
+        return redirect()->back()->with('err', $result['error']);
     }
 
     /**
