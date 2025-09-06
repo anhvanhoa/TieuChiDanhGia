@@ -9,6 +9,8 @@ class RanSanHoCoBien extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'ran_san_ho_co_bien';
     protected $fillable = [
         'vuon_quoc_gia_id',

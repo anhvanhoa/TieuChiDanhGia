@@ -9,6 +9,8 @@ class MucDoNghiemTrongApLuc extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'muc_do_nghiem_trong_ap_luc';
     protected $fillable = [
         'vuon_quoc_gia_id',

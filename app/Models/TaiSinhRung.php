@@ -9,6 +9,8 @@ class TaiSinhRung extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'tai_sinh_rung';
     protected $fillable = [
         'vuon_quoc_gia_id',

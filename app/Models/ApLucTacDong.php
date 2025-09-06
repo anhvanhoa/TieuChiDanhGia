@@ -9,6 +9,8 @@ class ApLucTacDong extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'ap_luc_tac_dong';
     protected $fillable = [
         'vuon_quoc_gia_id',

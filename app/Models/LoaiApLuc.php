@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoaiApLuc extends Model
 {
+    public $timestamps = false;
     use HasFactory;
 
     protected $table = 'loai_ap_luc';

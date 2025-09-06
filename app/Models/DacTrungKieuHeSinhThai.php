@@ -9,6 +9,8 @@ class DacTrungKieuHeSinhThai extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'dac_trung_kieu_he_sinh_thai';
     protected $fillable = [
         'vuon_quoc_gia_id',

@@ -9,6 +9,8 @@ class LoaiThucVatNguyCap extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'loai_thuc_vat_nguy_cap';
     protected $fillable = [
         'vuon_quoc_gia_id',

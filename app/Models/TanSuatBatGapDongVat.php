@@ -9,6 +9,8 @@ class TanSuatBatGapDongVat extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'tan_suat_bat_gap_dong_vat';
     protected $fillable = [
         'vuon_quoc_gia_id',

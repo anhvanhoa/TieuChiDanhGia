@@ -9,6 +9,8 @@ class TruLuongSinhKhoiCarbon extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'tru_luong_sinh_khoi_carbon';
     protected $fillable = [
         'vuon_quoc_gia_id',

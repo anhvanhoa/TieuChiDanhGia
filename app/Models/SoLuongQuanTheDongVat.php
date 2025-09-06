@@ -9,6 +9,8 @@ class SoLuongQuanTheDongVat extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'so_luong_quan_the_dong_vat';
     protected $fillable = [
         'vuon_quoc_gia_id',
